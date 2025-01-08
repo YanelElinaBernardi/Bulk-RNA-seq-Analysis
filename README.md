@@ -160,7 +160,7 @@ seqtk seq -2 SRR000000_Clean_Paired.fastq > SRR000000_Clean_Paired_2.fastq
 
 #### Step 6: Alignment to the Reference Genome
 
-Align reads to a reference genome using HISAT2.Download the genome from [Ensembl](https://www.ensembl.org) or [UCSC](https://genome.ucsc.edu/).
+Align reads to a reference genome using *[Hisat2](https://daehwankimlab.github.io/hisat2)*. Download the genome from [Ensembl](https://www.ensembl.org) or [UCSC](https://genome.ucsc.edu/).
 
 6.1: Index the Genome
 
@@ -204,4 +204,34 @@ hisat2 --no-unal --no-softclip --dta -x IndexGenome -1 SRR000000_Clean_Paired_1.
         2500000 (64.10%) aligned exactly 1 time
         400000 (10.26%) aligned >1 times
 95.76% overall alignment rate
+```
+
+#### Step 7: Gene Quantification
+
+7.1 Sorting SAM and convert to a BAM format
+
+```bash
+samtools sort SRR000000.sam > SRR000000.bam
+samtools sort SRR000000_Paired.sam > SRR000000_Paired.bam
+```
+7.2 Indexing the BAM file for counting
+
+```bash
+samtools index SRR000000.bam
+samtools index SRR000000_Paired.bam
+```
+
+7.3 Counting
+
+Use *[featureCounts](https://subread.sourceforge.net/featureCounts.html)* for gene-level quantification with gene annotation file (GTF format). Download the filefrom [Ensembl](https://www.ensembl.org) or[UCSC](https://genome.ucsc.edu/).
+
+```bash
+# We aligned with human genome, so now we use human gene annotation.
+# Make sure all BAM files stay in the same directory because we will generate a TAB file with the counts of all imputs (*).
+
+# For SINGLE-END reads:
+featureCounts -t exon -g gene_id -a hg38.ensGene.gtf -o Matrix_single.tab *.bam 
+
+# For PAIRED-END reads:
+featureCounts -p -t exon -g gene_id -a hg38.ensGene.gtf -o Matrix_paired.tab *.bam
 ```
