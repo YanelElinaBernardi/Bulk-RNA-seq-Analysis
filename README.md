@@ -1,10 +1,5 @@
 # Bulk RNA-seq Analysis
 
----
-Pipeline developed for accreditation: **WBDS LA Camp "Introduction to Bioinformatics and Data Science"**
-
----
-
 Bulk RNA sequencing (bulk RNA-seq) allows the analysis of the average gene expression in a population of cells. The transcriptomic profile obtained from bulk RNA-seq represents an average across all cells, unlike single-cell RNA sequencing (scRNA-seq), which enables the study of gene expression at the level of individual cells.
 
 This pipeline includes the following key steps:
